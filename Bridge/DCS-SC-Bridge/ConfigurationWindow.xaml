@@ -1,0 +1,32 @@
+<Window x:Class="DCS_SC_Bridge.ConfigurationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DCS-SC Bridge - Configuration" Height="454" Width="500"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="NoResize">
+    <Grid Background="#F0F0F0" Margin="0,0,0,-16">
+        <StackPanel Margin="20" VerticalAlignment="Top">
+            <TextBlock Text="DCS-SC Bridge Configuration" FontSize="18" FontWeight="Bold" Margin="0,0,0,20"/>
+            
+            <TextBlock Text="DCS Server IP:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBox x:Name="IpTextBox" Height="35" Padding="10" Text="127.0.0.1" Margin="0,0,0,15"/>
+            
+            <TextBlock Text="DCS Server Port:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBox x:Name="PortTextBox" Height="35" Padding="10" Text="10310" Margin="0,0,0,15"/>
+            
+            <TextBlock Text="API URL:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBox x:Name="ApiUrlTextBox" Height="35" Padding="10" Margin="0,0,0,15"/>
+            
+            <TextBlock Text="API Token:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <PasswordBox x:Name="TokenPasswordBox" Height="35" Padding="10" Margin="0,0,0,20"/>
+            
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Right">
+                <Button x:Name="SaveButton" Content="Save &amp; Continue" Click="SaveButton_Click" Width="140" Height="40" Background="#4CAF50" Foreground="White" FontWeight="Bold" Margin="0,0,10,0"/>
+                <Button x:Name="CancelButton" Content="Cancel" Click="CancelButton_Click" Width="100" Height="40" Background="#f44336" Foreground="White" FontWeight="Bold"/>
+            </StackPanel>
+            
+            <TextBlock x:Name="ErrorText" Text="" Foreground="#d32f2f" Margin="0,20,0,0" TextWrapping="Wrap"/>
+        </StackPanel>
+    </Grid>
+</Window>

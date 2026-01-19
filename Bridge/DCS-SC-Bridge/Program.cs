@@ -1,12 +1,15 @@
-using DCS_SC_Bridge;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using System.Windows;
 
-IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services =>
+namespace DCS_SC_Bridge
+{
+    public static class Program
     {
-        services.AddHostedService<Worker>();
-    })
-    .Build();
-
-await host.RunAsync();
+        //[STAThread]
+        //public static void Main(string[] args)
+        //{
+        //    var app = new App();
+        //    app.InitializeComponent();
+        //    app.Run();
+        //}
+    }
+}

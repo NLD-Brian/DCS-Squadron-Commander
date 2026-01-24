@@ -13,20 +13,42 @@ namespace DCS_SC_Bridge
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            // Show console window for debugging
+            ConsoleHelper.ShowConsole();
+            Console.WriteLine("[APP] Application starting...");
+
             var services = new ServiceCollection();
 
             // Configure services
             services.AddLogging(builder => builder.AddConsole().SetMinimumLevel(LogLevel.Information));
 
-            services.AddSingleton<AppSettings>(new AppSettings());
+            // Load settings from disk or use defaults
+            var settingsService = new SettingsService();
+            var settings = settingsService.Load();
+            services.AddSingleton(settings);
+            services.AddSingleton(settingsService);
+            
             services.AddSingleton<UdpListenerService>();
             services.AddSingleton<ConfigurationWindow>();
             services.AddSingleton<MainWindow>();
 
             _serviceProvider = services.BuildServiceProvider();
 
+            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             var configWindow = _serviceProvider.GetRequiredService<ConfigurationWindow>();
-            configWindow.Show();
+            
+            // Check if this is first run (no saved settings) or if settings are incomplete
+            if (string.IsNullOrWhiteSpace(settings.ApiUrl) || string.IsNullOrWhiteSpace(settings.ApiToken))
+            {
+                Console.WriteLine("[APP] First run - showing configuration window");
+                configWindow.Owner = null;
+                configWindow.Show();
+            }
+            else
+            {
+                Console.WriteLine("[APP] Settings loaded - showing main window");
+                mainWindow.Show();
+            }
         }
 
         protected override void OnExit(ExitEventArgs e)

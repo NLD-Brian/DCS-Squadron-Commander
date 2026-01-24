@@ -11,16 +11,18 @@ namespace DCS_SC_Bridge
         private readonly AppSettings _settings;
         private readonly UdpListenerService _listenerService;
         private readonly ILogger<MainWindow> _logger;
+        private readonly SettingsService _settingsService;
         private DispatcherTimer _uptimeTimer;
         private DateTime _startTime;
         private int _messageCount = 0;
 
-        public MainWindow(AppSettings settings, UdpListenerService listenerService, ILogger<MainWindow> logger)
+        public MainWindow(AppSettings settings, UdpListenerService listenerService, ILogger<MainWindow> logger, SettingsService settingsService = null)
         {
             InitializeComponent();
             _settings = settings;
             _listenerService = listenerService;
             _logger = logger;
+            _settingsService = settingsService ?? new SettingsService();
             
             InitializeUptimeTimer();
             SubscribeToMessages();
@@ -30,6 +32,7 @@ namespace DCS_SC_Bridge
         {
             _listenerService.MessageReceived += (s, msg) => 
             {
+                Console.WriteLine($"[GUI] Message event received in MainWindow: {msg}");
                 _messageCount++;
                 Dispatcher.Invoke(() => 
                 {
@@ -86,6 +89,8 @@ namespace DCS_SC_Bridge
                 LogMessage($"Error: {ex.Message}");
                 StatusText.Text = "Error";
                 StatusText.Foreground = System.Windows.Media.Brushes.Red;
+                StartButton.IsEnabled = true;
+                StopButton.IsEnabled = false;
             }
         }
 

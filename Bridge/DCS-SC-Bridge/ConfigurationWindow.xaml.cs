@@ -9,6 +9,7 @@ namespace DCS_SC_Bridge
     {
         private readonly SettingsService _settingsService;
         private readonly IServiceProvider _serviceProvider;
+        private AppSettings _currentSettings;
 
         public ConfigurationWindow() : this(null)
         {
@@ -20,10 +21,10 @@ namespace DCS_SC_Bridge
             _serviceProvider = serviceProvider;
             _settingsService = new SettingsService();
             
-            var settings = _settingsService.Load();
-            IpTextBox.Text = settings.ListenerIp;
-            PortTextBox.Text = settings.ListenerPort.ToString();
-            ApiUrlTextBox.Text = settings.ApiUrl;
+            _currentSettings = _settingsService.Load();
+            IpTextBox.Text = _currentSettings.ListenerIp;
+            PortTextBox.Text = _currentSettings.ListenerPort.ToString();
+            ApiUrlTextBox.Text = _currentSettings.ApiUrl;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -66,8 +67,14 @@ namespace DCS_SC_Bridge
             {
                 _settingsService.Save(settings);
                 
+                // Update the settings instance in the service provider
                 if (_serviceProvider != null)
                 {
+                    _currentSettings.ListenerIp = settings.ListenerIp;
+                    _currentSettings.ListenerPort = settings.ListenerPort;
+                    _currentSettings.ApiUrl = settings.ApiUrl;
+                    _currentSettings.ApiToken = settings.ApiToken;
+                    
                     var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
                     mainWindow.Show();
                 }
